@@ -1,4 +1,4 @@
-# Advanced Custom Fields: Ionicon Field
+# Ionicon Field for ACF
 Contributors: Salakhutdinov Salavat
 Tags: Advanced Custom Fields, ACF, Ionicons, Ionicon, Ion icon
 Requires at least: 5.0
