@@ -21,7 +21,7 @@ This ACF field type is compatible with:
 
 == Installation ==
 
-1. Copy the `acf-Ionicon` folder into your `wp-content/plugins` folder
+1. Copy the `acf-ionicon-field` folder into your `wp-content/plugins` folder
 2. Activate the Ionicon plugin via the plugins admin page
 3. Create a new field via ACF and select the Ionicon type
 4. Read the description above for usage instructions
