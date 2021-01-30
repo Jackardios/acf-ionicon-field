@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: Ionicon Field for ACF
+Plugin Name: Add Ionicon Field for ACF
 Plugin URI: https://github.com/Jackardios/acf-ionicon-field
 Description: Adds a new 'Ionicon' field to Advanced Custom Fields plugin.
 Version: 1.0.0
