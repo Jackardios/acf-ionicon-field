@@ -11,7 +11,7 @@ if (!class_exists('jackardios_acf_field_ionicon')) :
     class jackardios_acf_field_ionicon extends acf_field
     {
 
-        private $manifest_url = "https://unpkg.com/ionicons@5.2.3/dist/ionicons.json";
+        private $manifest_url = "https://unpkg.com/ionicons@5.4.0/dist/ionicons.json";
 
         /*
         *  __construct
