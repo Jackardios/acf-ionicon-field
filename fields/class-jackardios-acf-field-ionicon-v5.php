@@ -186,24 +186,15 @@ if (!class_exists('jackardios_acf_field_ionicon')) :
 
         private function get_ajax_query($options = array())
         {
-            $options = acf_parse_args($options, array(
-                'post_id' => 0,
-                's' => '',
-                'field_key' => '',
-                'paged' => 0
-            ));
+            $fieldKey = ($options['field_key'] ?? null) ? sanitize_key($options['field_key']) : null;
+            $searchText = ($options['s'] ?? null) ? wp_unslash(sanitize_text_field($options['s'])) : null;
+            $searchText = !empty($searchText) ? wp_unslash($searchText) : null;
 
             $results = array();
-            $s = null;
 
-            if ('default_value' != $options['field_key']) {
-                $field = acf_get_field($options['field_key']);
+            if ('default_value' != $fieldKey) {
+                $field = acf_get_field($fieldKey);
                 if (!$field) return false;
-            }
-
-            if ($options['s'] !== '') {
-                $s = strval($options['s']);
-                $s = wp_unslash($s);
             }
 
             $icons = apply_filters('acf_field_ionicon_get_icons', array());
@@ -214,10 +205,10 @@ if (!class_exists('jackardios_acf_field_ionicon')) :
                     $tags = $iconData['tags'] ?? array();
 
                     if ($name) {
-                        if (is_array($tags) && !empty($tags) && is_string($s)) {
+                        if (is_array($tags) && !empty($tags) && is_string($searchText)) {
                             foreach ($tags as $tag) {
                                 $tag = strval($tag);
-                                if (stripos($tag, $s) === false) {
+                                if (stripos($tag, $searchText) === false) {
                                     continue;
                                 }
                                 $results[] = array(
@@ -313,14 +304,27 @@ if (!class_exists('jackardios_acf_field_ionicon')) :
             $url = $this->settings['url'];
             $version = $this->settings['version'];
 
-
             // register & include JS
-            wp_register_script('acf-ionicon-ionicons', "https://unpkg.com/ionicons@5.2.3/dist/ionicons.js", array(), $version);
+            wp_register_script('acf-ionicon-ionicons', "https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js", array(), $version);
             wp_enqueue_script('acf-ionicon-ionicons');
 
-            wp_register_script('acf-ionicon-input', "{$url}assets/js/input.js", array('acf-input', 'acf-ionicon-ionicons'), $version);
+            wp_register_script('acf-ionicon-ionicons-module', "https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js", array('acf-ionicon-ionicons'), $version);
+            wp_enqueue_script('acf-ionicon-ionicons-module');
+
+            wp_register_script('acf-ionicon-input', "{$url}assets/js/input.js", array('acf-input', 'acf-ionicon-ionicons', 'acf-ionicon-ionicons-module'), $version);
             wp_enqueue_script('acf-ionicon-input');
 
+            // add module/nomodule attributes for ionicons scripts
+            add_filter('script_loader_tag', function ($tag, $handle) {
+                if ($handle === 'acf-ionicon-ionicons') {
+                    return str_replace(' src', ' nomodule defer src', $tag);
+                }
+                if ($handle === 'acf-ionicon-ionicons-module') {
+                    return str_replace(' src', ' type="module" src', $tag);
+                }
+
+                return $tag;
+            }, 10, 3);
 
             // register & include CSS
             wp_register_style('acf-ionicon-input', "{$url}assets/css/input.css", array('acf-input'), $version);
