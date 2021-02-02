@@ -174,7 +174,10 @@ if (!class_exists('jackardios_acf_field_ionicon')) :
                 die();
             }
 
-            $response = $this->get_ajax_query($_POST);
+            $response = $this->get_ajax_query([
+                'field_key' => $_POST['field_key'] ?? null,
+                's' => $_POST['s'] ?? null
+            ]);
 
             acf_send_ajax_results($response);
         }
